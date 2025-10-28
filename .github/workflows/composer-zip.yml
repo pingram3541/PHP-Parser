@@ -1,0 +1,38 @@
+name: Create Zip with Composer
+
+on:
+  push:
+    branches:
+      - main  # Change this to match your default branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+        
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0'  # Use the version required (>=7.4)
+          extensions: tokens, json, ctype  # Required extensions
+          
+      - name: Install Composer
+        run: |
+          php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+          php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+          php -r "unlink('composer-setup.php');"
+
+      - name: Install Composer Dependencies
+        run: composer install --no-progress --prefer-dist
+        
+      - name: Create Zip
+        run: zip -r php-parser.zip ./
+
+      - name: Upload Zip
+        uses: actions/upload-artifact@v2
+        with:
+          name: php-parser-zip
+          path: php-parser.zip
