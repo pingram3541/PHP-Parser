@@ -30,7 +30,8 @@ jobs:
 
       - name: Modify Class References
         run: |
-          find . -type f -name "*.php" -exec sed -i '' 's/\bPhpParser\b/PHPParser/g' {} +
+          # Using 'find' and 'sed' to replace 'PhpParser' with 'PHPParser'
+          find . -type f -name "*.php" -exec sed -i 's/\<PhpParser\>/PHPParser/g' {} +
 
       - name: Create Zip
         run: zip -r php-parser.zip ./
