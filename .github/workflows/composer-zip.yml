@@ -27,7 +27,11 @@ jobs:
 
       - name: Install Composer Dependencies
         run: composer install --no-progress --prefer-dist
-        
+
+      - name: Modify Class References
+        run: |
+          find . -type f -name "*.php" -exec sed -i '' 's/\bPhpParser\b/PHPParser/g' {} +
+
       - name: Create Zip
         run: zip -r php-parser.zip ./
 
